@@ -54,6 +54,42 @@ namespace MathProject
             this.Y = y;
         }
 
+        public Body(Body body)
+        {
+            this.Mass = body.Mass;
+            this.X = body.X;
+            this.Y = body.Y;
+            this.Radius = body.Radius;
+            this.Dx = body.Dx;
+            this.Dy = body.Dy;
+        }
+
+        //Возвращает элемент, который был присоединен к другому
+        public Body Merge(Body body)
+        {
+            var Mass = body.Mass + this.Mass;
+
+            var x = (body.X * body.Mass + this.X * this.Mass) / Mass;
+            var y = (body.Y * body.Mass + this.Y * this.Mass) / Mass;
+
+            var dx = (body.Dx * body.Mass + this.Dx * this.Mass) / Mass;
+            var dy = (body.Dy * body.Mass + this.Dy * this.Mass) / Mass;
+
+            var radius = Math.Pow(Mass,1/3) / 2;
+
+            Body toReturn = body.Mass > this.Mass ? this : body;
+
+            Body toChange = body.Mass > this.Mass ? body : this;
+
+            toChange.X = x;
+            toChange.Y = y;
+            toChange.Dx = dx;
+            toChange.Dy = dy;
+            toChange.Mass = Mass;
+            toChange.Radius += radius;
+
+            return toReturn;
+        }
 
     }
 }
